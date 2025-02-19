@@ -61,19 +61,19 @@ export const FiltrosReportes = ({ onDataFetched }) => {
     }, []);
 
     /**
-     * Efecto para manejar la obtención de datos
-     * Se ejecuta en el montaje inicial y cuando cambian las fechas
+     * Efecto para cargar datos iniciales y manejar cambios en las fechas
      */
     useEffect(() => {
-        // Solo realizar la petición si las fechas realmente cambiaron
+        // Realizar la petición inicial o cuando cambien las fechas
         const datesChanged = 
             previousDates.current.start !== dates.start || 
             previousDates.current.end !== dates.end;
 
-        if (datesChanged) {
+        // Realizar la petición si es la carga inicial o si las fechas cambiaron
+        if (!isLoaded || datesChanged) {
             fetchData();
         }
-    }, [fetchData, dates]);
+    }, [fetchData, dates, isLoaded]);
 
     /**
      * Manejador para cambios en las fechas

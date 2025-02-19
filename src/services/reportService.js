@@ -12,21 +12,23 @@ const getHeaders = () => {
 
 export const fetchReportDataIza = async (startDate, endDate) => {
   try {
-    const params = { start: startDate, end: endDate };
+    // Asegurar que tenemos fechas válidas
+    const start = startDate || new Date().toISOString().split('T')[0];
+    const end = endDate || new Date().toISOString().split('T')[0];
+    
+    const params = { start, end };
     const headers = getHeaders();
-
 
     const [usersResponse, messagesResponse] = await Promise.all([
       axios.get(endpoints.usersToday, { params, headers }),
       axios.get(endpoints.messagesToday, { params, headers })
     ]);
 
-    
-
-    const dataNormalized = normalizeDataIza(usersResponse.data, messagesResponse.data)
-    return dataNormalized
+    const dataNormalized = normalizeDataIza(usersResponse.data, messagesResponse.data);
+    return dataNormalized;
 
   } catch (error) {
+    console.error("Error fetching report data:", error);
     throw error;
   }
 };
